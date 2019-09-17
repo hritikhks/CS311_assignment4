@@ -29,6 +29,7 @@ public class OperandFetch {
 			}
 			String ins = Integer.toBinaryString(inst);
 			while(ins.length() < 32) ins = "0" + ins;
+			System.out.println(inst);
 			System.out.println(ins);
 
 			String opcode = ins.substring(0, 5);
@@ -50,24 +51,26 @@ public class OperandFetch {
 					rd = ins.substring(15, 20);
 				}
 				else {
-					rs1 = ins.substring(10,15);
-					imm = ins.substring(16, 32);
+					rd = ins.substring(10,15);
+					imm = ins.substring(15, 32);
 				}
 			}
 			else if(op == 22 || op == 23 || (24 < op && op < 29)) {
 				rs1 = ins.substring(5,10);
-				rs1 = ins.substring(10,15);
-				imm = ins.substring(16, 32);
+				rd = ins.substring(10,15);
+				imm = ins.substring(15, 32);
 			} 
 			else {
 				rd = ins.substring(5,10);
-				imm = ins.substring(16, 32);
+				imm = ins.substring(10, 32);
 			}
 
+			System.out.println(op + " " + rs1 + " " + rs2 + " " + rd + " "  + imm);
 
 
 
 			OF_EX_Latch.setopcode(opcode);
+			System.out.println("in opft " + OF_EX_Latch.getopcode());
 			OF_EX_Latch.setrd(rd);
 			OF_EX_Latch.setrs1(rs1);
 			OF_EX_Latch.setrs2(rs2);
@@ -82,6 +85,7 @@ public class OperandFetch {
 			// System.out.println(rd);
 			// System.out.println();
 			// System.out.println(imm);
+			// System.out.println("in opft " + OF_EX_Latch.getopcode());
 			IF_OF_Latch.setOF_enable(false);
 			OF_EX_Latch.setEX_enable(true);
 		}

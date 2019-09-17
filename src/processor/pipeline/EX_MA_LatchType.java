@@ -45,4 +45,11 @@ public class EX_MA_LatchType {
 		return isStore;
 	}
 
+	public void setLoadAddr(int a) {
+		this.LoadAddr = a;
+	}
+	public int getLoadAddr() {
+		return LoadAddr;
+	}
+
 }

@@ -50,7 +50,7 @@ public class OF_EX_LatchType {
 		return rs1;
 	}
 	public void setrs2(String opcode) {
-		this.opcode = opcode;
+		this.rs2 = opcode;
 	}
 
 	public String getrs2() {
@@ -58,7 +58,7 @@ public class OF_EX_LatchType {
 	}
 
 	public void setrd(String opcode) {
-		this.opcode = opcode;
+		this.rd = opcode;
 	}
 
 	public String getrd() {

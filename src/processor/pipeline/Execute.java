@@ -18,7 +18,8 @@ public class Execute {
 	
 	public void performEX() {
 		if(OF_EX_Latch.isEX_enable()) {
-			int aluResult;
+			System.out.println("in exft " + OF_EX_Latch.getopcode());
+			int aluResult = 0;
 			// if(OF_EX_Latch.getrs1() == "") OF_EX_Latch.rs1 = "000";
 			// if(OF_EX_Latch.getrs2() == "") OF_EX_Latch.rs2 = "000";
 			// if(OF_EX_Latch.getrd() == "") OF_EX_Latch.rd = "000";
@@ -26,98 +27,97 @@ public class Execute {
 			int rs1val = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrs1(),2));
 			int rs2val = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrs2(),2));
 			int rdval = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrd(),2));
-			// System.out.println(OF_EX_Latch.getimm()); 
-			int immval = Integer.parseInt(OF_EX_Latch.imm,2);
-			if(immval >= 65536) immval = immval - 65536;
+			System.out.println(OF_EX_Latch.getimm()); 
+			int immval = (short)Integer.parseInt(OF_EX_Latch.getimm(),2);
 			int WriteAddr = 70000;
-			
+			System.out.println("in execute " + " " + rs1val + " " + rs2val + " " + rdval + " " + immval);
 			switch(OF_EX_Latch.getopcode()) {
 				case "00000" : {
 					aluResult = rs1val + rs2val;
-					WriteAddr = rdval;
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "00001" : {
-					aluResult = rs1val + immval;
-					WriteAddr = rdval;
+					aluResult = rs1val + Integer.parseInt(OF_EX_Latch.getimm(),2);
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "00010" : {
 					aluResult = rs1val - rs2val;
-					WriteAddr = rdval;
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "00011" : {
-					aluResult = rs1val - immval;
-					WriteAddr = rdval;
+					aluResult = rs1val - Integer.parseInt(OF_EX_Latch.getimm(),2);
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "00100" : {
 					aluResult = rs1val * rs2val;
-					WriteAddr = rdval;
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "00101" : {
-					aluResult = rs1val * immval;
-					WriteAddr = rdval;
+					aluResult = rs1val * Integer.parseInt(OF_EX_Latch.getimm(),2);
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "00110" : {
 					if(rs2val != 0)	{
 						aluResult = rs1val / rs2val;
 						containingProcessor.getRegisterFile().setValue(31, rs1val % rs2val);
-						WriteAddr = rdval;
+						WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					}
 					break;
 				}
 				case "00111" : {
 					if(immval != 0)	{
-						aluResult = rs1val / immval;
+						aluResult = rs1val / Integer.parseInt(OF_EX_Latch.getimm(),2);
 						containingProcessor.getRegisterFile().setValue(31, rs1val % immval);
-						WriteAddr = rdval;
+						WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					}
 					break;
 				}
 				case "01000" : {
 					aluResult = rs1val & rs2val;
-					WriteAddr = rdval;
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "01001" : {
-					aluResult = rs1val & immval;
-					WriteAddr = rdval;
+					aluResult = rs1val & Integer.parseInt(OF_EX_Latch.getimm(),2);
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "01010" : {
 					aluResult = rs1val | rs2val;
-					WriteAddr = rdval;
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "01011" : {
-					aluResult = rs1val | immval;
-					WriteAddr = rdval;
+					aluResult = rs1val | Integer.parseInt(OF_EX_Latch.getimm(),2);
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "01100" : {
 					aluResult = rs1val ^ rs2val;
-					WriteAddr = rdval;
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "01101" : {
-					aluResult = rs1val ^ immval;
-					WriteAddr = rdval;
+					aluResult = rs1val ^ Integer.parseInt(OF_EX_Latch.getimm(),2);
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "01110" : {
 					if(rs2val > rs1val) aluResult = 1;
 					else aluResult = 0;
-					WriteAddr = rdval;
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 				case "01111" : {
 					if(rs2val > rs1val) aluResult = 1;
 					else aluResult = 0;
-					WriteAddr = rdval;
+					WriteAddr = Integer.parseInt(OF_EX_Latch.getrd(),2);
 					break;
 				}
 
@@ -126,7 +126,7 @@ public class Execute {
 					break;
 				}
 				case "10001" : {
-					aluResult = rs1val << immval;
+					aluResult = rs1val << Integer.parseInt(OF_EX_Latch.getimm(),2);
 					break;
 				}
 				case "10010" : {
@@ -134,7 +134,7 @@ public class Execute {
 					break;
 				}
 				case "10011" : {
-					aluResult = rs1val >> immval;
+					aluResult = rs1val >> Integer.parseInt(OF_EX_Latch.getimm(),2);
 					break;
 				}
 				case "10100" : {
@@ -142,20 +142,21 @@ public class Execute {
 					break;
 				}
 				case "10101" : {
-					aluResult = rs1val >>> immval;
+					aluResult = rs1val >>> Integer.parseInt(OF_EX_Latch.getimm(),2);
 					break;
 				}
 
 				case "10110" : {
-					aluResult = containingProcessor.getMainMemory().getWord(rs1val + immval);
+					aluResult = containingProcessor.getMainMemory().getWord(rs1val + Integer.parseInt(OF_EX_Latch.getimm(),2));
 					EX_MA_Latch.setisLoad(true);
-					EX_MA_Latch.LoadAddr = Integer.parseInt(OF_EX_Latch.getrd());
+					EX_MA_Latch.setLoadAddr(Integer.parseInt(OF_EX_Latch.getrd(),2));
+					System.out.println(rs1val + Integer.parseInt(OF_EX_Latch.getimm(),2) + " " + aluResult + " " + EX_MA_Latch.getLoadAddr());
 					break;
 				}
 				case "10111" : {
-					aluResult = containingProcessor.getRegisterFile().getValue(rs1val);
+					aluResult = rs1val;
 					EX_MA_Latch.setisStore(true);
-					EX_MA_Latch.StoreAddr = rdval + immval;
+					EX_MA_Latch.StoreAddr = rdval + Integer.parseInt(OF_EX_Latch.getimm(),2);
 					break;
 				}
 
@@ -187,6 +188,7 @@ public class Execute {
 
 			}
 			EX_MA_Latch.WriteAddr = WriteAddr;
+			EX_MA_Latch.aluResult = aluResult;
 
 			OF_EX_Latch.setEX_enable(false);
 			EX_MA_Latch.setMA_enable(true);

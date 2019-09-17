@@ -21,10 +21,14 @@ public class InstructionFetch {
 	{
 		if(IF_EnableLatch.isIF_enable())
 		{
-			if(EX_IF_Latch.getjmpAddr() != 70000) {
-				containingProcessor.getRegisterFile().setProgramCounter(EX_IF_Latch.getjmpAddr());
-			}
 			int currentPC = containingProcessor.getRegisterFile().getProgramCounter();
+			if(EX_IF_Latch.getjmpAddr() != 70000) {
+				System.out.print("Get set jmp : ");
+				containingProcessor.getRegisterFile().setProgramCounter(EX_IF_Latch.getjmpAddr() + currentPC - 1);
+				EX_IF_Latch.setjmpjmpAddr(70000);
+			}
+			currentPC = containingProcessor.getRegisterFile().getProgramCounter();
+			System.out.println("currpc " + currentPC);
 			int newInstruction = containingProcessor.getMainMemory().getWord(currentPC);
 			IF_OF_Latch.setInstruction(newInstruction);
 			containingProcessor.getRegisterFile().setProgramCounter(currentPC + 1);

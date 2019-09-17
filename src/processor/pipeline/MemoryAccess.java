@@ -15,13 +15,20 @@ public class MemoryAccess {
 	}
 	
 	public void performMA() {
-		if(EX_MA_Latch.isMA_enable() == true) {
+		if(EX_MA_Latch.isMA_enable()) {
+			// System.out.println("in memacc" + EX_MA_Latch.getLoadAddr() + " " + EX_MA_Latch.aluResult + " " + EX_MA_Latch.isLoad);
 			if(EX_MA_Latch.isLoad == true) {
-				containingProcessor.getRegisterFile().setValue(EX_MA_Latch.LoadAddr, EX_MA_Latch.aluResult);
+				EX_MA_Latch.isLoad = false;
+				System.out.println("in memacc cond " + EX_MA_Latch.getLoadAddr() + " " + EX_MA_Latch.aluResult);
+				containingProcessor.getRegisterFile().setValue(EX_MA_Latch.getLoadAddr(), EX_MA_Latch.aluResult);
 			}
 			if(EX_MA_Latch.isStore == true) {
+				EX_MA_Latch.isStore = false;
+				System.out.println("in storeuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu" + EX_MA_Latch.StoreAddr + " " + EX_MA_Latch.aluResult + " " + EX_MA_Latch.isStore);
+			
 				containingProcessor.getMainMemory().setWord(EX_MA_Latch.StoreAddr, EX_MA_Latch.aluResult);
 			}
+			System.out.println();
 
 			MA_RW_Latch.WriteAddr = EX_MA_Latch.WriteAddr;
 			MA_RW_Latch.aluResult = EX_MA_Latch.aluResult;
