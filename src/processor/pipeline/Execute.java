@@ -123,26 +123,50 @@ public class Execute {
 
 				case "10000" : {
 					aluResult = rs1val << rs2val;
+					String q = Integer.toBinaryString(rs1val);
+					while(q.length() != 5) q = "0" + q;
+					String x31 = q.substring(5-rs2val, 5);
+					containingProcessor.getRegisterFile().setValue(31, Integer.parseInt(x31,2));
 					break;
 				}
 				case "10001" : {
 					aluResult = rs1val << Integer.parseInt(OF_EX_Latch.getimm(),2);
+					String q = Integer.toBinaryString(immval);
+					while(q.length() != 5) q = "0" + q;
+					String x31 = q.substring(5-immval, 5);
+					containingProcessor.getRegisterFile().setValue(31, Integer.parseInt(x31,2));
 					break;
 				}
 				case "10010" : {
-					aluResult = rs1val >> rs2val;
+					aluResult = rs1val >>> rs2val;
+					String q = Integer.toBinaryString(rs1val);
+					while(q.length() != 5) q = "0" + q;
+					String x31 = q.substring(0, rs2val);
+					containingProcessor.getRegisterFile().setValue(31, Integer.parseInt(x31,2));
 					break;
 				}
 				case "10011" : {
-					aluResult = rs1val >> Integer.parseInt(OF_EX_Latch.getimm(),2);
+					aluResult = rs1val >>> Integer.parseInt(OF_EX_Latch.getimm(),2);
+					String q = Integer.toBinaryString(immval);
+					while(q.length() != 5) q = "0" + q;
+					String x31 = q.substring(0, immval);
+					containingProcessor.getRegisterFile().setValue(31, Integer.parseInt(x31,2));
 					break;
 				}
 				case "10100" : {
-					aluResult = rs1val >>> rs2val;
+					aluResult = rs1val >> rs2val;
+					String q = Integer.toBinaryString(rs1val);
+					while(q.length() != 5) q = "0" + q;
+					String x31 = q.substring(0, rs2val);
+					containingProcessor.getRegisterFile().setValue(31, Integer.parseInt(x31,2));
 					break;
 				}
 				case "10101" : {
-					aluResult = rs1val >>> Integer.parseInt(OF_EX_Latch.getimm(),2);
+					aluResult = rs1val >> Integer.parseInt(OF_EX_Latch.getimm(),2);
+					String q = Integer.toBinaryString(immval);
+					while(q.length() != 5) q = "0" + q;
+					String x31 = q.substring(0, immval);
+					containingProcessor.getRegisterFile().setValue(31, Integer.parseInt(x31,2));
 					break;
 				}
 
