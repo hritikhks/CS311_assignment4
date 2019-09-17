@@ -14,8 +14,7 @@ public class MemoryAccess {
 		this.MA_RW_Latch = mA_RW_Latch;
 	}
 	
-	public void performMA()
-	{
+	public void performMA() {
 		//TODO
 	}
 

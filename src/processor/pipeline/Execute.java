@@ -23,6 +23,7 @@ public class Execute {
 
 			int rs1val = Integer.parseInt(OF_EX_Latch.getrs1());
 			int rs2val = Integer.parseInt(OF_EX_Latch.getrs2());
+			int rdval = Integer.parseInt(OF_EX_Latch.getrd());
 			int immval = Integer.parseInt(OF_EX_Latch.getimm());
 			
 			switch(OF_EX_Latch.getopcode()) {
@@ -58,9 +59,86 @@ public class Execute {
 					aluResult = rs1val / immval;
 					break;
 				}
+				case "01000" : {
+					aluResult = rs1val & rs2val;
+					break;
+				}
+				case "01001" : {
+					aluResult = rs1val & immval;
+					break;
+				}
+				case "01010" : {
+					aluResult = rs1val | rs2val;
+					break;
+				}
+				case "01011" : {
+					aluResult = rs1val | immval;
+					break;
+				}
+				case "01100" : {
+					aluResult = rs1val ^ rs2val;
+					break;
+				}
+				case "01101" : {
+					aluResult = rs1val ^ immval;
+					break;
+				}
+				case "01110" : {
+					if(rs2val > rs1val) aluResult = 1;
+					else aluResult = 0;
+					break;
+				}
+				case "01111" : {
+					if(rs2val > rs1val) aluResult = 1;
+					else aluResult = 0;
+					break;
+				}
 
+				case "10000" : {
+					aluResult = rs1val << rs2val;
+					break;
+				}
+				case "10001" : {
+					aluResult = rs1val << immval;
+					break;
+				}
+				case "10010" : {
+					aluResult = rs1val >> rs2val;
+					break;
+				}
+				case "10011" : {
+					aluResult = rs1val >> immval;
+					break;
+				}
+				case "10100" : {
+					aluResult = rs1val >>> rs2val;
+					break;
+				}
+				case "10101" : {
+					aluResult = rs1val >>> immval;
+					break;
+				}
+
+				case "10110" : {
+					aluResult = containingProcessor.getMainMemory().getWord(rs1val + immval);
+				}
+				case "10111" : {
+					aluResult = containingProcessor.getMainMemory().getWord(rdval + immval);
+				}
 
 			}
+
+			if(OF_EX_Latch.getopcode() == "10110") {
+				EX_MA_Latch.setisLoad(true);
+				EX_MA_Latch.LoadAddr = Integer.parseInt(OF_EX_Latch.getrd());
+			}
+			else EX_MA_Latch.setisLoad(false);
+
+			if(OF_EX_Latch.getopcode() == "10111") {
+				EX_MA_Latch.setisStore(true);
+				EX_MA_Latch.StoreAddr = Integer.parseInt(OF_EX_Latch.getrs1());
+			}
+			else EX_MA_Latch.setisStore(false);
 
 
 			OF_EX_Latch.setEX_enable(false);
