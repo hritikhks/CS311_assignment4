@@ -8,11 +8,14 @@ public class OF_EX_LatchType {
 	String rs1;
 	String rs2;
 	String rd;
-	String jmpwhere;
 
 	
 	public OF_EX_LatchType() {
 		EX_enable = false;
+		imm = "0000";
+		rs1 = "00";
+		rs2 = "00";
+		rd = "00";
 	}
 
 	public boolean isEX_enable() {
@@ -61,14 +64,5 @@ public class OF_EX_LatchType {
 	public String getrd() {
 		return rd;
 	}
-
-	public void setjmpwhere(String opcode) {
-		this.jmpwhere = opcode;
-	}
-
-	public String getjmphere() {
-		return jmpwhere;
-	}
-
 	
 }

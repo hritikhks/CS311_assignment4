@@ -1,5 +1,7 @@
 package processor.pipeline;
 
+import java.math.BigInteger;
+
 import processor.Processor;
 
 public class OperandFetch {
@@ -19,18 +21,22 @@ public class OperandFetch {
 		if(IF_OF_Latch.isOF_enable())
 		{
 			//TODO
-			
-			String ins = Integer.toBinaryString(IF_OF_Latch.getInstruction());
+			int inst = IF_OF_Latch.getInstruction();
+			BigInteger z = new BigInteger("4294967296");
+			if(inst < 0) {
+				z = z.add(BigInteger.valueOf(inst));
+				inst = z.intValue();
+			}
+			String ins = Integer.toBinaryString(inst);
 			while(ins.length() < 32) ins = "0" + ins;
+			System.out.println(ins);
 
 			String opcode = ins.substring(0, 5);
-			String imm = new String();
-			String rs1 = new String();
-			String rs2 = new String();
-			String rd = new String();
+			String imm = "00000";
+			String rs1 = "0000";
+			String rs2 = "0000";
+			String rd = "0000";
 			int op = Integer.parseInt(opcode,2);
-
-			String aluSignal = new String();
 
 			if(op == 0) {
 				rs1 = ins.substring(5,10);
@@ -45,29 +51,19 @@ public class OperandFetch {
 				}
 				else {
 					rs1 = ins.substring(10,15);
-					imm = ins.substring(15, 32);
+					imm = ins.substring(16, 32);
 				}
 			}
 			else if(op == 22 || op == 23 || (24 < op && op < 29)) {
 				rs1 = ins.substring(5,10);
 				rs1 = ins.substring(10,15);
-				imm = ins.substring(15, 32);
+				imm = ins.substring(16, 32);
 			} 
 			else {
 				rd = ins.substring(5,10);
-				imm = ins.substring(10, 32);
+				imm = ins.substring(16, 32);
 			}
 
-			String jmpwhere = new String();
-
-			if(op > 23 && op < 29) {
-				if(op == 24) jmpwhere = Integer.toString(Integer.parseInt(rd,2) + Integer.parseInt(imm,2));
-				else jmpwhere = imm;
-			}
-			else jmpwhere = "noo";
-
-
-			OF_EX_Latch.setjmpwhere(jmpwhere);
 
 
 

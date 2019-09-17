@@ -8,10 +8,17 @@ public class EX_MA_LatchType {
 	boolean isStore;
 	int LoadAddr;
 	int StoreAddr;
+	boolean isWrite;
+	int WriteAddr;
+	boolean isEnd;
 	
 	public EX_MA_LatchType()
 	{
 		MA_enable = false;
+		isLoad = false;
+		isStore = false;
+		WriteAddr = 70000;
+		isEnd = false;
 	}
 
 	public boolean isMA_enable() {

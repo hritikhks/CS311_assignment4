@@ -18,79 +18,106 @@ public class Execute {
 	
 	public void performEX() {
 		if(OF_EX_Latch.isEX_enable()) {
-			EX_IF_Latch.setjmpwhere(OF_EX_Latch.getjmphere());
 			int aluResult;
-
-			int rs1val = Integer.parseInt(OF_EX_Latch.getrs1());
-			int rs2val = Integer.parseInt(OF_EX_Latch.getrs2());
-			int rdval = Integer.parseInt(OF_EX_Latch.getrd());
-			int immval = Integer.parseInt(OF_EX_Latch.getimm());
+			// if(OF_EX_Latch.getrs1() == "") OF_EX_Latch.rs1 = "000";
+			// if(OF_EX_Latch.getrs2() == "") OF_EX_Latch.rs2 = "000";
+			// if(OF_EX_Latch.getrd() == "") OF_EX_Latch.rd = "000";
+			// if(OF_EX_Latch.getimm() == "") OF_EX_Latch.imm = "000";
+			int rs1val = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrs1(),2));
+			int rs2val = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrs2(),2));
+			int rdval = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrd(),2));
+			// System.out.println(OF_EX_Latch.getimm()); 
+			int immval = Integer.parseInt(OF_EX_Latch.imm,2);
+			if(immval >= 65536) immval = immval - 65536;
+			int WriteAddr = 70000;
 			
 			switch(OF_EX_Latch.getopcode()) {
 				case "00000" : {
 					aluResult = rs1val + rs2val;
+					WriteAddr = rdval;
 					break;
 				}
 				case "00001" : {
 					aluResult = rs1val + immval;
+					WriteAddr = rdval;
 					break;
 				}
 				case "00010" : {
 					aluResult = rs1val - rs2val;
+					WriteAddr = rdval;
 					break;
 				}
 				case "00011" : {
 					aluResult = rs1val - immval;
+					WriteAddr = rdval;
 					break;
 				}
 				case "00100" : {
 					aluResult = rs1val * rs2val;
+					WriteAddr = rdval;
 					break;
 				}
 				case "00101" : {
 					aluResult = rs1val * immval;
+					WriteAddr = rdval;
 					break;
 				}
 				case "00110" : {
-					aluResult = rs1val / rs2val;
+					if(rs2val != 0)	{
+						aluResult = rs1val / rs2val;
+						containingProcessor.getRegisterFile().setValue(31, rs1val % rs2val);
+						WriteAddr = rdval;
+					}
 					break;
 				}
 				case "00111" : {
-					aluResult = rs1val / immval;
+					if(immval != 0)	{
+						aluResult = rs1val / immval;
+						containingProcessor.getRegisterFile().setValue(31, rs1val % immval);
+						WriteAddr = rdval;
+					}
 					break;
 				}
 				case "01000" : {
 					aluResult = rs1val & rs2val;
+					WriteAddr = rdval;
 					break;
 				}
 				case "01001" : {
 					aluResult = rs1val & immval;
+					WriteAddr = rdval;
 					break;
 				}
 				case "01010" : {
 					aluResult = rs1val | rs2val;
+					WriteAddr = rdval;
 					break;
 				}
 				case "01011" : {
 					aluResult = rs1val | immval;
+					WriteAddr = rdval;
 					break;
 				}
 				case "01100" : {
 					aluResult = rs1val ^ rs2val;
+					WriteAddr = rdval;
 					break;
 				}
 				case "01101" : {
 					aluResult = rs1val ^ immval;
+					WriteAddr = rdval;
 					break;
 				}
 				case "01110" : {
 					if(rs2val > rs1val) aluResult = 1;
 					else aluResult = 0;
+					WriteAddr = rdval;
 					break;
 				}
 				case "01111" : {
 					if(rs2val > rs1val) aluResult = 1;
 					else aluResult = 0;
+					WriteAddr = rdval;
 					break;
 				}
 
@@ -121,25 +148,45 @@ public class Execute {
 
 				case "10110" : {
 					aluResult = containingProcessor.getMainMemory().getWord(rs1val + immval);
+					EX_MA_Latch.setisLoad(true);
+					EX_MA_Latch.LoadAddr = Integer.parseInt(OF_EX_Latch.getrd());
+					break;
 				}
 				case "10111" : {
-					aluResult = containingProcessor.getMainMemory().getWord(rdval + immval);
+					aluResult = containingProcessor.getRegisterFile().getValue(rs1val);
+					EX_MA_Latch.setisStore(true);
+					EX_MA_Latch.StoreAddr = rdval + immval;
+					break;
 				}
 
-			}
+				case "11000" : {
+					EX_IF_Latch.setjmpjmpAddr(rdval + immval);
+					break;
+				}
+				case "11001" : {
+					if(rs1val == rdval) EX_IF_Latch.setjmpjmpAddr(immval);
+					break;
+				}
+				case "11010" : {
+					if(rs1val != rdval) EX_IF_Latch.setjmpjmpAddr(immval); 
+					break;
+				}
+				case "11011" : {
+					if(rs1val < rdval) EX_IF_Latch.setjmpjmpAddr(immval); 
+					break;
+				}
+				case "11100" : {
+					if(rs1val > rdval) EX_IF_Latch.setjmpjmpAddr(immval); 
+					break;
+				}
+				case "11101" : {
+					EX_MA_Latch.isEnd = true;
+					break;
+				}
+				default : break;
 
-			if(OF_EX_Latch.getopcode() == "10110") {
-				EX_MA_Latch.setisLoad(true);
-				EX_MA_Latch.LoadAddr = Integer.parseInt(OF_EX_Latch.getrd());
 			}
-			else EX_MA_Latch.setisLoad(false);
-
-			if(OF_EX_Latch.getopcode() == "10111") {
-				EX_MA_Latch.setisStore(true);
-				EX_MA_Latch.StoreAddr = Integer.parseInt(OF_EX_Latch.getrs1());
-			}
-			else EX_MA_Latch.setisStore(false);
-
+			EX_MA_Latch.WriteAddr = WriteAddr;
 
 			OF_EX_Latch.setEX_enable(false);
 			EX_MA_Latch.setMA_enable(true);

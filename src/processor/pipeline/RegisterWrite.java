@@ -20,7 +20,12 @@ public class RegisterWrite {
 		if(MA_RW_Latch.isRW_enable())
 		{
 			//TODO
-			
+			if(MA_RW_Latch.WriteAddr != 70000) {
+				containingProcessor.getRegisterFile().setValue(MA_RW_Latch.WriteAddr, MA_RW_Latch.aluResult);
+			}
+			if(MA_RW_Latch.isEnd == true) {
+				Simulator.setSimulationComplete(true);
+			} 
 			// if instruction being processed is an end instruction, remember to call Simulator.setSimulationComplete(true);
 			
 			MA_RW_Latch.setRW_enable(false);
