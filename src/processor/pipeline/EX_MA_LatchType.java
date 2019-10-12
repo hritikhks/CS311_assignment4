@@ -11,6 +11,8 @@ public class EX_MA_LatchType {
 	boolean isWrite;
 	int WriteAddr;
 	boolean isEnd;
+	int currentIns;
+	String currentop;
 	
 	public EX_MA_LatchType()
 	{
@@ -19,6 +21,8 @@ public class EX_MA_LatchType {
 		isStore = false;
 		WriteAddr = 70000;
 		isEnd = false;
+		currentIns = -1;
+		currentop = "11111";
 	}
 
 	public boolean isMA_enable() {

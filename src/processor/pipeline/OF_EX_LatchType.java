@@ -8,7 +8,8 @@ public class OF_EX_LatchType {
 	String rs1;
 	String rs2;
 	String rd;
-
+	int currentIns;
+	String currentop;
 	
 	public OF_EX_LatchType() {
 		EX_enable = false;
@@ -16,6 +17,8 @@ public class OF_EX_LatchType {
 		rs1 = "00";
 		rs2 = "00";
 		rd = "00";
+		currentIns = -1;
+		currentop = "11111";
 	}
 
 	public boolean isEX_enable() {

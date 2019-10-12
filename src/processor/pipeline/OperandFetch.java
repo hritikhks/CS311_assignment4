@@ -6,6 +6,7 @@ import processor.Processor;
 
 public class OperandFetch {
 	Processor containingProcessor;
+	IF_EnableLatchType IF_EnableLatch;
 	IF_OF_LatchType IF_OF_Latch;
 	OF_EX_LatchType OF_EX_Latch;
 	
@@ -29,10 +30,12 @@ public class OperandFetch {
 			}
 			String ins = Integer.toBinaryString(inst);
 			while(ins.length() < 32) ins = "0" + ins;
-			System.out.println(inst);
-			System.out.println(ins);
+			// System.out.println(inst);
+			// System.out.println(ins);
 
 			String opcode = ins.substring(0, 5);
+
+			// if(opcode == "11101") IF_EnableLatch.setIF_enable(false);
 			String imm = "00000";
 			String rs1 = "0000";
 			String rs2 = "0000";
@@ -65,12 +68,12 @@ public class OperandFetch {
 				imm = ins.substring(10, 32);
 			}
 
-			System.out.println(op + " " + rs1 + " " + rs2 + " " + rd + " "  + imm);
+			// System.out.println(op + " " + rs1 + " " + rs2 + " " + rd + " "  + imm);
 
 
 
 			OF_EX_Latch.setopcode(opcode);
-			System.out.println("in opft " + OF_EX_Latch.getopcode());
+			// System.out.println("in opft " + OF_EX_Latch.getopcode());
 			OF_EX_Latch.setrd(rd);
 			OF_EX_Latch.setrs1(rs1);
 			OF_EX_Latch.setrs2(rs2);
@@ -86,7 +89,14 @@ public class OperandFetch {
 			// System.out.println();
 			// System.out.println(imm);
 			// System.out.println("in opft " + OF_EX_Latch.getopcode());
-			IF_OF_Latch.setOF_enable(false);
+			// IF_OF_Latch.setOF_enable(false);
+
+			OF_EX_Latch.currentIns = IF_OF_Latch.currentIns;
+			OF_EX_Latch.currentop = opcode;
+			System.out.println("OP " + IF_OF_Latch.currentIns);
+			if(opcode.equals("11101")) {
+				IF_OF_Latch.setOF_enable(false);
+			}
 			OF_EX_Latch.setEX_enable(true);
 		}
 	}

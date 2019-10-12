@@ -18,7 +18,8 @@ public class Execute {
 	
 	public void performEX() {
 		if(OF_EX_Latch.isEX_enable()) {
-			System.out.println("in exft " + OF_EX_Latch.getopcode());
+			// System.out.println("EX");
+			// System.out.println("in exft " + OF_EX_Latch.getopcode());
 			int aluResult = 0;
 			// if(OF_EX_Latch.getrs1() == "") OF_EX_Latch.rs1 = "000";
 			// if(OF_EX_Latch.getrs2() == "") OF_EX_Latch.rs2 = "000";
@@ -27,10 +28,10 @@ public class Execute {
 			int rs1val = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrs1(),2));
 			int rs2val = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrs2(),2));
 			int rdval = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrd(),2));
-			System.out.println(OF_EX_Latch.getimm()); 
+			// System.out.println(OF_EX_Latch.getimm()); 
 			int immval = (short)Integer.parseInt(OF_EX_Latch.getimm(),2);
 			int WriteAddr = 70000;
-			System.out.println("in execute " + " " + rs1val + " " + rs2val + " " + rdval + " " + immval);
+			// System.out.println("in execute " + " " + rs1val + " " + rs2val + " " + rdval + " " + immval);
 			switch(OF_EX_Latch.getopcode()) {
 				case "00000" : {
 					aluResult = rs1val + rs2val;
@@ -174,7 +175,7 @@ public class Execute {
 					aluResult = containingProcessor.getMainMemory().getWord(rs1val + Integer.parseInt(OF_EX_Latch.getimm(),2));
 					EX_MA_Latch.setisLoad(true);
 					EX_MA_Latch.setLoadAddr(Integer.parseInt(OF_EX_Latch.getrd(),2));
-					System.out.println(rs1val + Integer.parseInt(OF_EX_Latch.getimm(),2) + " " + aluResult + " " + EX_MA_Latch.getLoadAddr());
+					// System.out.println(rs1val + Integer.parseInt(OF_EX_Latch.getimm(),2) + " " + aluResult + " " + EX_MA_Latch.getLoadAddr());
 					break;
 				}
 				case "10111" : {
@@ -214,7 +215,16 @@ public class Execute {
 			EX_MA_Latch.WriteAddr = WriteAddr;
 			EX_MA_Latch.aluResult = aluResult;
 
-			OF_EX_Latch.setEX_enable(false);
+			EX_MA_Latch.currentIns = OF_EX_Latch.currentIns;
+			EX_MA_Latch.currentop = OF_EX_Latch.currentop;
+
+			System.out.println("EX "+ OF_EX_Latch.currentIns);
+
+			if(OF_EX_Latch.currentop.equals("11101")) {
+				OF_EX_Latch.setEX_enable(false);
+			}
+
+			// OF_EX_Latch.setEX_enable(false);
 			EX_MA_Latch.setMA_enable(true);
 		}
 		//TODO
