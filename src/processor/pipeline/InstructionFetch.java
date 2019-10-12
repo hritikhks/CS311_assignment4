@@ -45,7 +45,7 @@ public class InstructionFetch {
 			// System.out.println(ins);
 
 			String opcode = ins.substring(0, 5);
-			System.out.println(opcode);
+			System.out.println(currentPC);
 			if(opcode.equals("11101")) {
 				IF_EnableLatch.setIF_enable(false);
 			}

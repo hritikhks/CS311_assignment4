@@ -10,6 +10,9 @@ public class OF_EX_LatchType {
 	String rd;
 	int currentIns;
 	String currentop;
+	boolean isNop;
+
+	boolean isConfOF_EX;
 	
 	public OF_EX_LatchType() {
 		EX_enable = false;
@@ -19,6 +22,8 @@ public class OF_EX_LatchType {
 		rd = "00";
 		currentIns = -1;
 		currentop = "11111";
+		isConfOF_EX = false;
+		isNop = false;
 	}
 
 	public boolean isEX_enable() {

@@ -30,6 +30,7 @@ public class Execute {
 			int rdval = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrd(),2));
 			// System.out.println(OF_EX_Latch.getimm()); 
 			int immval = (short)Integer.parseInt(OF_EX_Latch.getimm(),2);
+			
 			int WriteAddr = 70000;
 			// System.out.println("in execute " + " " + rs1val + " " + rs2val + " " + rdval + " " + immval);
 			switch(OF_EX_Latch.getopcode()) {
@@ -215,6 +216,11 @@ public class Execute {
 			EX_MA_Latch.WriteAddr = WriteAddr;
 			EX_MA_Latch.aluResult = aluResult;
 
+			EX_MA_Latch.setrd(OF_EX_Latch.getrd());
+			EX_MA_Latch.setrs1(OF_EX_Latch.getrs1());
+			EX_MA_Latch.setrs2(OF_EX_Latch.getrs2());
+			EX_MA_Latch.setimm(OF_EX_Latch.getimm());
+
 			EX_MA_Latch.currentIns = OF_EX_Latch.currentIns;
 			EX_MA_Latch.currentop = OF_EX_Latch.currentop;
 
@@ -223,7 +229,9 @@ public class Execute {
 			if(OF_EX_Latch.currentop.equals("11101")) {
 				OF_EX_Latch.setEX_enable(false);
 			}
-
+			if(EX_MA_Latch.MA_enable == true) {
+				if(EX_MA_Latch.getrd().equals(OF_EX_Latch.getrs1()) == true || EX_MA_Latch.getrd().equals(OF_EX_Latch.getrs2()) == true) OF_EX_Latch.isConfOF_EX = true;
+			}
 			// OF_EX_Latch.setEX_enable(false);
 			EX_MA_Latch.setMA_enable(true);
 		}

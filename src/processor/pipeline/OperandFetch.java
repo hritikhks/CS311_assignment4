@@ -9,12 +9,16 @@ public class OperandFetch {
 	IF_EnableLatchType IF_EnableLatch;
 	IF_OF_LatchType IF_OF_Latch;
 	OF_EX_LatchType OF_EX_Latch;
+	EX_MA_LatchType EX_MA_Latch;
+	MA_RW_LatchType MA_RW_Latch;
 	
-	public OperandFetch(Processor containingProcessor, IF_OF_LatchType iF_OF_Latch, OF_EX_LatchType oF_EX_Latch)
+	public OperandFetch(Processor containingProcessor, IF_OF_LatchType iF_OF_Latch, OF_EX_LatchType oF_EX_Latch,EX_MA_LatchType eX_MA_Latch,MA_RW_LatchType mA_RW_Latch)
 	{
 		this.containingProcessor = containingProcessor;
 		this.IF_OF_Latch = iF_OF_Latch;
 		this.OF_EX_Latch = oF_EX_Latch;
+		this.EX_MA_Latch = eX_MA_Latch;
+		this.MA_RW_Latch = mA_RW_Latch;
 	}
 	
 	public void performOF()
@@ -70,10 +74,10 @@ public class OperandFetch {
 
 			// System.out.println(op + " " + rs1 + " " + rs2 + " " + rd + " "  + imm);
 
+			
 
 
 			OF_EX_Latch.setopcode(opcode);
-			// System.out.println("in opft " + OF_EX_Latch.getopcode());
 			OF_EX_Latch.setrd(rd);
 			OF_EX_Latch.setrs1(rs1);
 			OF_EX_Latch.setrs2(rs2);

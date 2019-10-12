@@ -27,7 +27,7 @@ public class RegisterWrite {
 			if(MA_RW_Latch.isLoad == true) {
 				MA_RW_Latch.isLoad = false;
 				// System.out.println("in memacc cond " + EX_MA_Latch.getLoadAddr() + " " + EX_MA_Latch.aluResult);
-				containingProcessor.getRegisterFile().setValue(MA_RW_Latch.getLoadAddr(), MA_RW_Latch.aluResult);
+				containingProcessor.getRegisterFile().setValue(MA_RW_Latch.getLoadAddr(), MA_RW_Latch.LoadContent);
 			}
 			if(MA_RW_Latch.isEnd == true) {
 				Simulator.setSimulationComplete(true);
