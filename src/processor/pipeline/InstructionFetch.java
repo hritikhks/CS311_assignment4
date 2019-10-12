@@ -26,7 +26,7 @@ public class InstructionFetch {
 			int currentPC = containingProcessor.getRegisterFile().getProgramCounter();
 			if(EX_IF_Latch.getjmpAddr() != 70000) {
 				// System.out.print("Get set jmp : ");
-				containingProcessor.getRegisterFile().setProgramCounter(EX_IF_Latch.getjmpAddr() + currentPC - 1);
+				containingProcessor.getRegisterFile().setProgramCounter(EX_IF_Latch.getjmpAddr() + currentPC - 2);
 				EX_IF_Latch.setjmpjmpAddr(70000);
 			}
 			currentPC = containingProcessor.getRegisterFile().getProgramCounter();

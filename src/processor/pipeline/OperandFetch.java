@@ -11,14 +11,16 @@ public class OperandFetch {
 	OF_EX_LatchType OF_EX_Latch;
 	EX_MA_LatchType EX_MA_Latch;
 	MA_RW_LatchType MA_RW_Latch;
+	IF_EnableLatchType if_EnableLatch;
 	
-	public OperandFetch(Processor containingProcessor, IF_OF_LatchType iF_OF_Latch, OF_EX_LatchType oF_EX_Latch,EX_MA_LatchType eX_MA_Latch,MA_RW_LatchType mA_RW_Latch)
+	public OperandFetch(Processor containingProcessor, IF_OF_LatchType iF_OF_Latch, OF_EX_LatchType oF_EX_Latch,EX_MA_LatchType eX_MA_Latch,MA_RW_LatchType mA_RW_Latch,IF_EnableLatchType if_EnableLatch)
 	{
 		this.containingProcessor = containingProcessor;
 		this.IF_OF_Latch = iF_OF_Latch;
 		this.OF_EX_Latch = oF_EX_Latch;
 		this.EX_MA_Latch = eX_MA_Latch;
 		this.MA_RW_Latch = mA_RW_Latch;
+		this.IF_EnableLatch = if_EnableLatch;
 	}
 	
 	public void performOF()
@@ -73,15 +75,51 @@ public class OperandFetch {
 			}
 
 			// System.out.println(op + " " + rs1 + " " + rs2 + " " + rd + " "  + imm);
+			String rdEX = OF_EX_Latch.getrd();
+			String rdMA = EX_MA_Latch.getrd();
+			String rdRW = EX_MA_Latch.getrd();
+			
+			if(rs1.equals(rdEX) == true || rs1.equals(rdMA) == true || rs1.equals(rdRW) == true || rs2.equals(rdEX) == true) {
+				OF_EX_Latch.isNop = true;
+				IF_EnableLatch.setIF_enable(false);
+				OF_EX_Latch.setrd("111111");
+			}
+			else if(opcode.equals("11001") || opcode.equals("11010") || opcode.equals("11011") || opcode.equals("11100")) {
+				if(rd.equals(rdEX) == true || rd.equals(rdMA) == true) {
+					OF_EX_Latch.isNop = true;
+					IF_EnableLatch.setIF_enable(false);
+					OF_EX_Latch.setrd("111111");
+				}
+				else {
+					IF_EnableLatch.setIF_enable(true);
+					OF_EX_Latch.isNop = false;
+					OF_EX_Latch.setopcode(opcode);
+					OF_EX_Latch.setrd(rd);
+					OF_EX_Latch.setrs1(rs1);
+					OF_EX_Latch.setrs2(rs2);
+					OF_EX_Latch.setimm(imm);
+					OF_EX_Latch.setEX_enable(true);
+				}
+			}
+			else {
+				IF_EnableLatch.setIF_enable(true);
+				OF_EX_Latch.isNop = false;
+				OF_EX_Latch.setopcode(opcode);
+				OF_EX_Latch.setrd(rd);
+				OF_EX_Latch.setrs1(rs1);
+				OF_EX_Latch.setrs2(rs2);
+				OF_EX_Latch.setimm(imm);
+				OF_EX_Latch.setEX_enable(true);
+			}
 
 			
 
 
-			OF_EX_Latch.setopcode(opcode);
-			OF_EX_Latch.setrd(rd);
-			OF_EX_Latch.setrs1(rs1);
-			OF_EX_Latch.setrs2(rs2);
-			OF_EX_Latch.setimm(imm);
+			// OF_EX_Latch.setopcode(opcode);
+			// OF_EX_Latch.setrd(rd);
+			// OF_EX_Latch.setrs1(rs1);
+			// OF_EX_Latch.setrs2(rs2);
+			// OF_EX_Latch.setimm(imm);
 
 			// System.out.println(opcode);
 			// System.out.println();
@@ -100,6 +138,7 @@ public class OperandFetch {
 			System.out.println("OP " + IF_OF_Latch.currentIns);
 			if(opcode.equals("11101")) {
 				IF_OF_Latch.setOF_enable(false);
+				IF_EnableLatch.setIF_enable(false);
 			}
 			OF_EX_Latch.setEX_enable(true);
 		}

@@ -21,23 +21,30 @@ public class RegisterWrite {
 		{
 			
 			//TODO
-			if(MA_RW_Latch.WriteAddr != 70000) {
-				containingProcessor.getRegisterFile().setValue(MA_RW_Latch.WriteAddr, MA_RW_Latch.aluResult);
+			if(MA_RW_Latch.isNop == true) {
+				
 			}
-			if(MA_RW_Latch.isLoad == true) {
-				MA_RW_Latch.isLoad = false;
-				// System.out.println("in memacc cond " + EX_MA_Latch.getLoadAddr() + " " + EX_MA_Latch.aluResult);
-				containingProcessor.getRegisterFile().setValue(MA_RW_Latch.getLoadAddr(), MA_RW_Latch.LoadContent);
+			else {
+				MA_RW_Latch.isNop = false;
+				if(MA_RW_Latch.WriteAddr != 70000) {
+					containingProcessor.getRegisterFile().setValue(MA_RW_Latch.WriteAddr, MA_RW_Latch.aluResult);
+				}
+				if(MA_RW_Latch.isLoad == true) {
+					MA_RW_Latch.isLoad = false;
+					// System.out.println("in memacc cond " + EX_MA_Latch.getLoadAddr() + " " + EX_MA_Latch.aluResult);
+					containingProcessor.getRegisterFile().setValue(MA_RW_Latch.getLoadAddr(), MA_RW_Latch.LoadContent);
+				}
+				if(MA_RW_Latch.isEnd == true) {
+					Simulator.setSimulationComplete(true);
+				} 
+				// else IF_EnableLatch.setIF_enable(true);
+	
+				System.out.println("RW " + MA_RW_Latch.currentIns);
+				// if instruction being processed is an end instruction, remember to call Simulator.setSimulationComplete(true);
+				
+				// MA_RW_Latch.setRW_enable(false);
 			}
-			if(MA_RW_Latch.isEnd == true) {
-				Simulator.setSimulationComplete(true);
-			} 
-			// else IF_EnableLatch.setIF_enable(true);
-
-			System.out.println("RW " + MA_RW_Latch.currentIns);
-			// if instruction being processed is an end instruction, remember to call Simulator.setSimulationComplete(true);
 			
-			// MA_RW_Latch.setRW_enable(false);
 			
 		}
 	}
