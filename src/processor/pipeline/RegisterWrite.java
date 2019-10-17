@@ -21,11 +21,10 @@ public class RegisterWrite {
 		{
 			
 			//TODO
-			if(MA_RW_Latch.isNop == true) {
-				
+			if(MA_RW_Latch.isNop()==true){
+
 			}
-			else {
-				MA_RW_Latch.isNop = false;
+			else{
 				if(MA_RW_Latch.WriteAddr != 70000) {
 					containingProcessor.getRegisterFile().setValue(MA_RW_Latch.WriteAddr, MA_RW_Latch.aluResult);
 				}
@@ -38,14 +37,12 @@ public class RegisterWrite {
 					Simulator.setSimulationComplete(true);
 				} 
 				// else IF_EnableLatch.setIF_enable(true);
-	
-				System.out.println("RW " + MA_RW_Latch.currentIns);
+
+				System.out.println("RW " + MA_RW_Latch.currentIns + " " + MA_RW_Latch.opcode + " " + MA_RW_Latch.rs1 + " " + MA_RW_Latch.rs2 + " " + MA_RW_Latch.rd + " " + MA_RW_Latch.imm);
 				// if instruction being processed is an end instruction, remember to call Simulator.setSimulationComplete(true);
 				
 				// MA_RW_Latch.setRW_enable(false);
 			}
-			
-			
 		}
 	}
 

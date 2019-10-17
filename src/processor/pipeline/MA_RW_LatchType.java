@@ -10,10 +10,10 @@ public class MA_RW_LatchType {
 	boolean isLoad;
 	int currentIns;
 	String currentop;
+	boolean Nop;
 	int LoadContent;
 
-	boolean isNop;
-
+	String opcode;
 	String imm;
 	String rs1;
 	String rs2;
@@ -25,16 +25,24 @@ public class MA_RW_LatchType {
 		isEnd = false;
 		isLoad = false;
 		currentIns = -1;
-		LoadContent = 70000;
 		currentop = "11111";
-
 		imm = "0000";
 		rs1 = "00";
 		rs2 = "00";
 		rd = "00";
-		isNop = false;
+		Nop = false;
+		LoadContent = 70000;
+
 	}
 
+
+	public boolean isNop() {
+		return Nop;
+	}
+
+	public void setNop(boolean b) {
+		this.Nop = b;
+	}
 	public boolean isRW_enable() {
 		return RW_enable;
 	}
@@ -56,6 +64,14 @@ public class MA_RW_LatchType {
 	}
 	public int getLoadAddr() {
 		return LoadAddr;
+	}
+
+	public void setopcode(String opcode) {
+		this.opcode = opcode;
+	}
+
+	public String getopcode() {
+		return opcode;
 	}
 
 	public void setimm(String opcode) {
@@ -88,4 +104,5 @@ public class MA_RW_LatchType {
 	public String getrd() {
 		return rd;
 	}
+
 }

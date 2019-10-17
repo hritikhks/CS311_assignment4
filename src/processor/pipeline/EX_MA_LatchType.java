@@ -13,10 +13,9 @@ public class EX_MA_LatchType {
 	boolean isEnd;
 	int currentIns;
 	String currentop;
+	boolean Nop;
 
-	boolean isConfEX_MA;
-	boolean isNop;
-
+	String opcode;
 	String imm;
 	String rs1;
 	String rs2;
@@ -30,15 +29,21 @@ public class EX_MA_LatchType {
 		WriteAddr = 70000;
 		isEnd = false;
 		currentIns = -1;
-		isConfEX_MA = false;
 		currentop = "11111";
 		imm = "0000";
 		rs1 = "00";
 		rs2 = "00";
 		rd = "00";
-		isNop = false;
+		Nop = false;
+
+	}
+	public boolean isNop() {
+		return Nop;
 	}
 
+	public void setNop(boolean b) {
+		this.Nop = b;
+	}
 	public boolean isMA_enable() {
 		return MA_enable;
 	}
@@ -68,6 +73,15 @@ public class EX_MA_LatchType {
 	}
 	public int getLoadAddr() {
 		return LoadAddr;
+	}
+
+
+	public void setopcode(String opcode) {
+		this.opcode = opcode;
+	}
+
+	public String getopcode() {
+		return opcode;
 	}
 
 	public void setimm(String opcode) {
@@ -100,5 +114,4 @@ public class EX_MA_LatchType {
 	public String getrd() {
 		return rd;
 	}
-
 }

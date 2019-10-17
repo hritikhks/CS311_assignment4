@@ -14,6 +14,7 @@ public class Simulator {
 	static Processor processor;
 	static boolean simulationComplete;
 	
+	
 	public static void setupSimulation(String assemblyProgramFile, Processor p) throws FileNotFoundException
 	{
 		Simulator.processor = p;
@@ -73,13 +74,17 @@ public class Simulator {
 			processor.getEXUnit().performEX();
 			processor.getOFUnit().performOF();
 			processor.getIFUnit().performIF();
-			System.out.println();
+			System.out.println( i + " --------------------------------------------------------------");
 			Clock.incrementClock();
+			//if(i==10)break;
 			i++;
 		}
 		
 		// TODO
 		Statistics stat = new Statistics();
+		System.out.println("clock value ---------------" + i);
+		System.out.println("num of stalls "+Clock.getnumstall());
+		System.out.println("num of wrong path "+Clock.getwrongpath());
 		stat.setNumberOfCycles((int)Clock.getCurrentTime());
 		stat.setNumberOfInstructions((int)Clock.getCurrentTime()/5);
 		// set statistics

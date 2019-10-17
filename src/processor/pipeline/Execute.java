@@ -1,36 +1,38 @@
 package processor.pipeline;
+import processor.Clock;
 
 import processor.Processor;
 
 public class Execute {
 	Processor containingProcessor;
+	IF_EnableLatchType IF_EnableLatch;
 	OF_EX_LatchType OF_EX_Latch;
-	IF_OF_LatchType IF_OF_Latch;
 	EX_MA_LatchType EX_MA_Latch;
 	EX_IF_LatchType EX_IF_Latch;
-	IF_EnableLatchType IF_EnableLatch;
+	IF_OF_LatchType IF_OF_Latch;
 	
-	public Execute(Processor containingProcessor, OF_EX_LatchType oF_EX_Latch, EX_MA_LatchType eX_MA_Latch, EX_IF_LatchType eX_IF_Latch,IF_EnableLatchType if_EnableLatch,IF_OF_LatchType iF_OF_Latch)
+	public Execute(Processor containingProcessor, IF_OF_LatchType iF_OF_Latch, OF_EX_LatchType oF_EX_Latch, EX_MA_LatchType eX_MA_Latch, EX_IF_LatchType eX_IF_Latch, IF_EnableLatchType iF_EnableLatch)
 	{
 		this.containingProcessor = containingProcessor;
 		this.OF_EX_Latch = oF_EX_Latch;
 		this.EX_MA_Latch = eX_MA_Latch;
 		this.EX_IF_Latch = eX_IF_Latch;
-		this.IF_EnableLatch = if_EnableLatch;
 		this.IF_OF_Latch = iF_OF_Latch;
+		this.IF_EnableLatch = iF_EnableLatch;
 	}
 	
 	public void performEX() {
-		boolean taken = false;
 		if(OF_EX_Latch.isEX_enable()) {
-			if(OF_EX_Latch.isNop == true) {
-				EX_MA_Latch.isNop = true;
+			// System.out.println("EX");
+			// System.out.println("in exft " + OF_EX_Latch.getopcode());
+			boolean taken = false;
+			if(OF_EX_Latch.isNop() == true){
 				EX_MA_Latch.setrd("111111");
+				EX_MA_Latch.setNop(true);
 			}
-			else {
-				EX_MA_Latch.isNop = false;
-				// System.out.println("EX");
-				// System.out.println("in exft " + OF_EX_Latch.getopcode());
+			else{
+				EX_MA_Latch.setNop(false);
+
 				int aluResult = 0;
 				// if(OF_EX_Latch.getrs1() == "") OF_EX_Latch.rs1 = "000";
 				// if(OF_EX_Latch.getrs2() == "") OF_EX_Latch.rs2 = "000";
@@ -41,7 +43,6 @@ public class Execute {
 				int rdval = containingProcessor.getRegisterFile().getValue(Integer.parseInt(OF_EX_Latch.getrd(),2));
 				// System.out.println(OF_EX_Latch.getimm()); 
 				int immval = (short)Integer.parseInt(OF_EX_Latch.getimm(),2);
-				
 				int WriteAddr = 70000;
 				// System.out.println("in execute " + " " + rs1val + " " + rs2val + " " + rdval + " " + immval);
 				switch(OF_EX_Latch.getopcode()) {
@@ -199,24 +200,25 @@ public class Execute {
 
 					case "11000" : {
 						EX_IF_Latch.setjmpjmpAddr(rdval + immval);
+						taken = true;
 						break;
 					}
 					case "11001" : {
-						if(rs1val == rdval) {
+						if(rs1val == rdval){
 							EX_IF_Latch.setjmpjmpAddr(immval);
 							taken = true;
 						}
 						break;
 					}
 					case "11010" : {
-						if(rs1val != rdval) {
+						if(rs1val != rdval){
 							EX_IF_Latch.setjmpjmpAddr(immval); 
 							taken = true;
 						}
 						break;
 					}
 					case "11011" : {
-						if(rs1val < rdval) {
+						if(rs1val < rdval){
 							EX_IF_Latch.setjmpjmpAddr(immval); 
 							taken = true;
 						}
@@ -236,40 +238,41 @@ public class Execute {
 					default : break;
 
 				}
+
+				
+				EX_MA_Latch.setopcode(OF_EX_Latch.opcode);
+				// System.out.println("in opft " + OF_EX_Latch.getopcode());
+				EX_MA_Latch.setrd(OF_EX_Latch.rd);
+				EX_MA_Latch.setrs1(OF_EX_Latch.rs1);
+				EX_MA_Latch.setrs2(OF_EX_Latch.rs2);
+				EX_MA_Latch.setimm(OF_EX_Latch.imm);
+				
+				if(taken == true){
+					taken = false;
+					IF_EnableLatch.setIF_enable(true);
+					OF_EX_Latch.setrs1("00");
+					OF_EX_Latch.setrs2("00");
+					OF_EX_Latch.setrd("00");
+					OF_EX_Latch.setimm("0000");
+					OF_EX_Latch.setopcode("00000");
+					IF_OF_Latch.setInstruction(0);
+					Clock.incrementwrongpath();
+
+				}
 				EX_MA_Latch.WriteAddr = WriteAddr;
 				EX_MA_Latch.aluResult = aluResult;
-
-				EX_MA_Latch.setrd(OF_EX_Latch.getrd());
-				EX_MA_Latch.setrs1(OF_EX_Latch.getrs1());
-				EX_MA_Latch.setrs2(OF_EX_Latch.getrs2());
-				EX_MA_Latch.setimm(OF_EX_Latch.getimm());
 
 				EX_MA_Latch.currentIns = OF_EX_Latch.currentIns;
 				EX_MA_Latch.currentop = OF_EX_Latch.currentop;
 
-				if(taken) {
-					taken = false;
-					IF_EnableLatch.setIF_enable(true);
-					OF_EX_Latch.setopcode("00000");
-					OF_EX_Latch.setimm("000");
-					OF_EX_Latch.setrd("000");
-					OF_EX_Latch.setrs1("0000");
-					OF_EX_Latch.setrs2("000");
-					IF_OF_Latch.setInstruction(0);;
-				}
-
-
-				System.out.println("EX "+ OF_EX_Latch.currentIns);
+				System.out.println("EX " + OF_EX_Latch.opcode + " " + OF_EX_Latch.rs1 + " " + OF_EX_Latch.rs2 + " " + OF_EX_Latch.rd + " " + OF_EX_Latch.imm );
 
 				if(OF_EX_Latch.currentop.equals("11101")) {
 					OF_EX_Latch.setEX_enable(false);
 				}
-				// if(EX_MA_Latch.MA_enable == true) {
-				// 	if(EX_MA_Latch.getrd().equals(OF_EX_Latch.getrs1()) == true || EX_MA_Latch.getrd().equals(OF_EX_Latch.getrs2()) == true) OF_EX_Latch.isConfOF_EX = true;
-				// }
-				// OF_EX_Latch.setEX_enable(false);
-				EX_MA_Latch.setMA_enable(true);
 			}
+			// OF_EX_Latch.setEX_enable(false);
+			EX_MA_Latch.setMA_enable(true);
 		}
 		//TODO
 	}

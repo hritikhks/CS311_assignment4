@@ -10,9 +10,7 @@ public class OF_EX_LatchType {
 	String rd;
 	int currentIns;
 	String currentop;
-	boolean isNop;
-
-	boolean isConfOF_EX;
+	boolean Nop;
 	
 	public OF_EX_LatchType() {
 		EX_enable = false;
@@ -22,8 +20,15 @@ public class OF_EX_LatchType {
 		rd = "00";
 		currentIns = -1;
 		currentop = "11111";
-		isConfOF_EX = false;
-		isNop = false;
+		Nop = false;
+	}
+
+	public boolean isNop() {
+		return Nop;
+	}
+
+	public void setNop(boolean b) {
+		this.Nop = b;
 	}
 
 	public boolean isEX_enable() {
@@ -73,4 +78,11 @@ public class OF_EX_LatchType {
 		return rd;
 	}
 	
+	public int getcurrentIns() {
+		return currentIns;
+	}
+
+	public void setcurrentIns(int instruction) {
+		this.currentIns = instruction;
+	}
 }
