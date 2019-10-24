@@ -93,7 +93,6 @@ public class OperandFetch {
 				IF_EnableLatch.setIF_enable(false);
 				OF_EX_Latch.setrd("111111");
 				OF_EX_Latch.setNop(true);
-				Clock.incrementstall();
 
 			}
 			else if(opcode.equals("11001") || opcode.equals("11010") || opcode.equals("11011") || opcode.equals("11100")) {

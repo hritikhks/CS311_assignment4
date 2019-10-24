@@ -200,7 +200,6 @@ public class Execute {
 
 					case "11000" : {
 						EX_IF_Latch.setjmpjmpAddr(rdval + immval);
-						taken = true;
 						break;
 					}
 					case "11001" : {
@@ -256,7 +255,6 @@ public class Execute {
 					OF_EX_Latch.setimm("0000");
 					OF_EX_Latch.setopcode("00000");
 					IF_OF_Latch.setInstruction(0);
-					Clock.incrementwrongpath();
 
 				}
 				EX_MA_Latch.WriteAddr = WriteAddr;

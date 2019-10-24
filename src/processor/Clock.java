@@ -13,23 +13,4 @@ public class Clock {
 	{
 		return currentTime;
 	}
-
-	public static void incrementstall()
-	{
-		num_stall++;
-	}
-	
-	public static long getnumstall()
-	{
-		return num_stall;
-	}
-	public static void incrementwrongpath()
-	{
-		num_wrongpath++;
-	}
-	
-	public static long getwrongpath()
-	{
-		return num_wrongpath;
-	}
 }
