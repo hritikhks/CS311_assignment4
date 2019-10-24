@@ -200,6 +200,7 @@ public class Execute {
 
 					case "11000" : {
 						EX_IF_Latch.setjmpjmpAddr(rdval + immval);
+						taken = true;
 						break;
 					}
 					case "11001" : {
