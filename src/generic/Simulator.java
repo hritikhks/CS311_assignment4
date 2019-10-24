@@ -83,6 +83,8 @@ public class Simulator {
 		// TODO
 		Statistics stat = new Statistics();
 		System.out.println("clock value ---------------" + i);
+		System.out.println("num of stalls "+Clock.getnumstall());
+		System.out.println("num of wrong path "+Clock.getwrongpath());
 		stat.setNumberOfCycles((int)Clock.getCurrentTime());
 		stat.setNumberOfInstructions((int)Clock.getCurrentTime()/5);
 		// set statistics
